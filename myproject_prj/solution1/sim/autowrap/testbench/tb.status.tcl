@@ -1,0 +1,1 @@
+set ::AESL_AUTOSIM::gTopFileName /home/crchen/LARGE_FULL_WEIGHT_INPUT/myproject_prj/solution1/./sim/autowrap/testbench/myproject.cpp_pre.cpp.tb.cpp

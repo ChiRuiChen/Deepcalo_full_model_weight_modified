@@ -127,7 +127,9 @@ void myproject(
     // ****************************************
 
     //hls-fpga-machine-learning insert layers
-
+    
+    
+    
     hls::stream<layer2_t> layer2_out("layer2_out");
     #pragma HLS STREAM variable=layer2_out depth=3080
     nnet::resize_nearest<input_t, config2>(em_barrel, layer2_out); // up_sampling2d
@@ -281,5 +283,6 @@ void myproject(
     nnet::dense<layer52_t, layer53_t, config53>(layer52_out, layer53_out, w53, b53); // dense_2
 
     nnet::relu<layer53_t, result_t, relu_config55>(layer53_out, layer55_out); // activation
-
+    
+    
 }

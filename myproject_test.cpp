@@ -26,7 +26,7 @@
 #include <math.h>
 
 #include "firmware/myproject.h"
-#include "firmware/nnet_utils/nnet_helpers.h"
+
 
 //hls-fpga-machine-learning insert bram
 
@@ -85,81 +85,10 @@ int main(int argc, char **argv)
        model_default_t b53[1];
        
 
-  if (fin.is_open() && fpr.is_open()) {
-    while ( std::getline(fin,iline) && std::getline (fpr,pline) ) {
-      if (e % CHECKPOINT == 0) std::cout << "Processing input " << e << std::endl;
-      char* cstr=const_cast<char*>(iline.c_str());
-      char* current;
-      std::vector<float> in;
-      current=strtok(cstr," ");
-      while(current!=NULL) {
-        in.push_back(atof(current));
-        current=strtok(NULL," ");
-      }
-      cstr=const_cast<char*>(pline.c_str());
-      std::vector<float> pr;
-      current=strtok(cstr," ");
-      while(current!=NULL) {
-        pr.push_back(atof(current));
-        current=strtok(NULL," ");
-      }
-      
-      
-      
-      
-      
-      
-      
-      //hls-fpga-machine-learning insert data
       hls::stream<input_t> em_barrel("em_barrel");
-      nnet::copy_data<float, input_t, 0, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(in, em_barrel);
       hls::stream<result_t> layer55_out("layer55_out");
-
-      //hls-fpga-machine-learning insert top-level-function
       unsigned short size_in1,size_out1;
       myproject(em_barrel,layer55_out,size_in1,size_out1, s3,b3,w4,b4,w9,b9,w13,b13,w18,b18,w22,b22,w27,b27,w31,b31,w36,b36,w40,b40,w45,b45,w49,b49,w53,b53);
-
-      if (e % CHECKPOINT == 0) {
-        std::cout << "Predictions" << std::endl;
-        //hls-fpga-machine-learning insert predictions
-        for(int i = 0; i < N_LAYER_53; i++) {
-          std::cout << pr[i] << " ";
-        }
-        std::cout << std::endl;
-        std::cout << "Quantized predictions" << std::endl;
-        //hls-fpga-machine-learning insert quantized
-        nnet::print_result<result_t, N_LAYER_53>(layer55_out, std::cout, true);
-      }
-      e++;
-
-      //hls-fpga-machine-learning insert tb-output
-      nnet::print_result<result_t, N_LAYER_53>(layer55_out, fout);
-
-    }
-    fin.close();
-    fpr.close();
-  } else {
-    std::cout << "INFO: Unable to open input/predictions file, using default input." << std::endl;
-
-    //hls-fpga-machine-learning insert zero
-    hls::stream<input_t> em_barrel("em_barrel");
-    nnet::fill_zero<input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(em_barrel);
-    hls::stream<result_t> layer55_out("layer55_out");
-
-    //hls-fpga-machine-learning insert top-level-function
-    unsigned short size_in1,size_out1;
-    myproject(em_barrel,layer55_out,size_in1,size_out1, s3,b3,w4,b4,w9,b9,w13,b13,w18,b18,w22,b22,w27,b27,w31,b31,w36,b36,w40,b40,w45,b45,w49,b49,w53,b53);
-
-    //hls-fpga-machine-learning insert output
-    nnet::print_result<result_t, N_LAYER_53>(layer55_out, std::cout, true);
-
-    //hls-fpga-machine-learning insert tb-output
-    nnet::print_result<result_t, N_LAYER_53>(layer55_out, fout);
-
-  }
-
-  fout.close();
-  std::cout << "INFO: Saved inference results to file: " << RESULTS_LOG << std::endl;
 
   return 0;
 }

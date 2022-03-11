@@ -21,5 +21,4 @@ obj/myproject_test.o: ../../../../myproject_test.cpp \
  /opt/Xilinx/Vivado/2019.2/include/ap_fixed_special.h \
  /opt/Xilinx/Vivado/2019.2/include/hls_stream.h \
  ../../../../firmware/defines.h \
- ../../../../firmware/nnet_utils/nnet_types.h \
- ../../../../firmware/nnet_utils/nnet_helpers.h
+ ../../../../firmware/nnet_utils/nnet_types.h
